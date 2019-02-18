@@ -22,3 +22,7 @@ $ sh docker-recreate.sh
 ```
 $ docker rm -f some-mongo
 ```
+
+## Expected Result
+
+![alt tag](./Robo3T.png)
