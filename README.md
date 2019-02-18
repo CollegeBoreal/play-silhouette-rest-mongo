@@ -66,6 +66,8 @@ curl http://localhost:9000/badPassword -H 'X-Auth-Token:eyJ0eXAiOiJKV1QiLCJhbGci
 It is possible to reload database with based data with scripts:
 [recreate.bat](database/recreate.bat) or [recreate.sh](database/recreate.sh)
 
+Using Docker: see the [database](./database) section
+
 ## API documentation
 
 Documentation is available under address: [REST API](http://localhost:9000/docs)
