@@ -31,17 +31,17 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class SilhouetteModule extends AbstractModule with ScalaModule {
 
   override def configure() = {
-    bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]]
     bind[UnsecuredErrorHandler].to[CustomUnsecuredErrorHandler]
     bind[SecuredErrorHandler].to[CustomSecuredErrorHandler]
-    bind[UserService].to[UserServiceImpl]
     bind[CacheLayer].to[PlayCacheLayer]
     bind[IDGenerator].toInstance(new SecureRandomIDGenerator())
     bind[EventBus].toInstance(EventBus())
     bind[Clock].toInstance(Clock())
 
-    bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAOImpl]
-    bind[AuthenticatorRepository[JWTAuthenticator]].to[AuthenticatorRepositoryImpl]
+    bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]] // set your own DefaultEnv
+    bind[UserService].to[UserServiceImpl]   // @provides provideEnvironment
+    bind[AuthenticatorRepository[JWTAuthenticator]].to[AuthenticatorRepositoryImpl] // @provides provideAuthenticatorService
+    bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAOImpl] // provides provideAuthInfoRepository
   }
 
   /**
