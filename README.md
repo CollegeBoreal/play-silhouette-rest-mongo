@@ -10,7 +10,10 @@ Example project for Play Framework that uses [Silhouette](https://github.com/moh
 $ curl --request POST http://localhost:9000/api/auth/signup  \
        --header 'Content-Type: application/json' \
        --data '{"identifier": "foo", "password": "Bar!", "email": "foo@bar.it", "firstName": "Foo", "lastName": "Bar"}' \
-       --verbose```
+       --verbose
+```
+
+```
 < HTTP/1.1 200 OK
 < Content-Type: application/json; charset=utf-8
 < X-Auth-Token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
