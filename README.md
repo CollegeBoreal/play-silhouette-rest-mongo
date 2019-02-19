@@ -7,8 +7,10 @@ Example project for Play Framework that uses [Silhouette](https://github.com/moh
 ### Sign-up
 
 ```bash
-curl -X POST http://localhost:9000/api/auth/signup  -H 'Content-Type: application/json' -d '{"identifier": "adam.zareba", "password": "this!Password!Is!Very!Very!Strong!", "email": "adam.zareba@test.pl", "firstName": "Adam", "lastName": "Zaręba"}' -v
-```
+$ curl --request POST http://localhost:9000/api/auth/signup  \
+       --header 'Content-Type: application/json' \
+       --data '{"identifier": "foo", "password": "this!Bar!", "email": "foo@bar.co", "firstName": "Foo", "lastName": "Bar"}' \
+       --verbose```
 
 ```
 < HTTP/1.1 200 OK
