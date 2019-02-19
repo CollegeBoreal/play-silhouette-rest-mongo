@@ -7,7 +7,10 @@ Example project for Play Framework that uses [Silhouette](https://github.com/moh
 ### Sign-up
 
 ```bash
-curl -X POST http://localhost:9000/api/auth/signup  -H 'Content-Type: application/json' -d '{"identifier": "adam.zareba", "password": "this!Password!Is!Very!Very!Strong!", "email": "adam.zareba@test.pl", "firstName": "Adam", "lastName": "Zaręba"}' -v
+$ curl --request POST http://localhost:9000/api/auth/signup  \
+       --header 'Content-Type: application/json' \
+       --data '{"identifier": "adam.zareba", "password": "this!Password!Is!Very!Very!Strong!", "email": "adam.zareba@test.pl", "firstName": "Adam", "lastName": "Zaręba"}' \
+       --verbose
 ```
 
 ```
@@ -26,7 +29,9 @@ curl -X POST http://localhost:9000/api/auth/signup  -H 'Content-Type: applicatio
 _Not necessary just after the sign-up because you already have a valid token._
 
 ```bash
-curl -X POST http://localhost:9000/api/auth/signin/credentials -H 'Content-Type: application/json' -d '{"identifier": "adam.zareba", "password": "this!Password!Is!Very!Very!Strong!"}' -v
+$ curl --request POST http://localhost:9000/api/auth/signin/credentials \
+       --header 'Content-Type: application/json' -d '{"identifier": "adam.zareba", "password": "this!Password!Is!Very!Very!Strong!"}' \
+       --verbose
 ```
 
 ```
@@ -45,7 +50,7 @@ curl -X POST http://localhost:9000/api/auth/signin/credentials -H 'Content-Type:
 _The token must belong to a user with Admin role_
 
 ```bash
-curl http://localhost:9000/badPassword -H 'X-Auth-Token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...' -v
+$ curl http://localhost:9000/badPassword --header 'X-Auth-Token:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...' --verbose
 ```
 
 ```
