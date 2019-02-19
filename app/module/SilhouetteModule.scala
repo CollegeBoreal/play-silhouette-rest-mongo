@@ -38,9 +38,9 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[EventBus].toInstance(EventBus())
     bind[Clock].toInstance(Clock())
 
-    bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]] // set your own DefaultEnv
-    bind[UserService].to[UserServiceImpl]   // @provides provideEnvironment
-    bind[AuthenticatorRepository[JWTAuthenticator]].to[AuthenticatorRepositoryImpl] // @provides provideAuthenticatorService
+    bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]] // set your own Environment [Type]
+    bind[UserService].to[UserServiceImpl]   // @provides provideEnvironment [Implementation]
+    bind[JWTAuthenticatorService].to[AuthenticatorRepositoryImpl] // @provides provideAuthenticatorService Implementation
     bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAOImpl] // provides provideAuthInfoRepository
   }
 
@@ -62,9 +62,10 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     * @return The Silhouette environment.
     */
   @Provides
-  def provideEnvironment(userService: UserService,
-                         authenticatorService: AuthenticatorService[JWTAuthenticator],
-                         eventBus: EventBus): Environment[DefaultEnv] =
+  def provideEnvironment(
+                                  userService: UserService,
+  @Named("authenticator-service") authenticatorService: JWTAuthenticatorService,
+                                  eventBus: EventBus): Environment[DefaultEnv] =
   Environment[DefaultEnv](userService, authenticatorService, Seq(), eventBus)
 
   /**
@@ -91,11 +92,13 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     * @return The authenticator service.
     */
   @Provides
-  def provideAuthenticatorService(@Named("authenticator-crypter") crypter: Crypter,
+  @Named("authenticator-service")
+  def provideAuthenticatorService(
+  @Named("authenticator-crypter") crypter: Crypter,
                                   idGenerator: IDGenerator,
                                   configuration: Configuration,
                                   clock: Clock,
-                                  reactiveMongoApi: ReactiveMongoApi): AuthenticatorService[JWTAuthenticator] = {
+                                  reactiveMongoApi: ReactiveMongoApi): JWTAuthenticatorService = {
     val settings = JWTAuthenticatorSettings(sharedSecret = configuration.get[String]("play.http.secret.key"))
     val encoder = new CrypterAuthenticatorEncoder(crypter)
     val authenticatorRepository = new AuthenticatorRepositoryImpl(reactiveMongoApi)
