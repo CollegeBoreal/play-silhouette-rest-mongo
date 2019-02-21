@@ -40,7 +40,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
 
     bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]] // set your own Environment [Type]
     bind[UserService].to[UserServiceImpl]   // @provides provideEnvironment [Implementation]
-//    bind[JWTAuthenticatorService].to[AuthenticatorRepositoryImpl] // @provides provideAuthenticatorService Implementation
+    bind[JWTAuthenticatorService].to[AuthenticatorRepositoryImpl] // @provides provideAuthenticatorService Implementation
     bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAOImpl] // provides provideAuthInfoRepository
   }
 
