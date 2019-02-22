@@ -40,7 +40,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
 
     bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]] // set your own Environment [Type]
     bind[UserService].to[UserServiceImpl]   // @provides provideEnvironment [Implementation]
-    bind[JWTAuthenticatorService].to[AuthenticatorRepositoryImpl] // @provides provideAuthenticatorService Implementation
+    bind[AuthenticatorRepository[JWTAuthenticator]].to[AuthenticatorRepositoryImpl] // @provides provideAuthenticatorService
     bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAOImpl] // provides provideAuthInfoRepository
   }
 
@@ -64,7 +64,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   @Provides
   def provideEnvironment(
                                   userService: UserService,
-  @Named("authenticator-service") authenticatorService: JWTAuthenticatorService,
+  @Named("authenticator-service") authenticatorService: AuthenticatorService[JWTAuthenticator],
                                   eventBus: EventBus): Environment[DefaultEnv] =
   Environment[DefaultEnv](userService, authenticatorService, Seq(), eventBus)
 
@@ -98,7 +98,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
                                   idGenerator: IDGenerator,
                                   configuration: Configuration,
                                   clock: Clock,
-                                  reactiveMongoApi: ReactiveMongoApi): JWTAuthenticatorService = {
+                                  reactiveMongoApi: ReactiveMongoApi): AuthenticatorService[JWTAuthenticator] = {
     val settings = JWTAuthenticatorSettings(sharedSecret = configuration.get[String]("play.http.secret.key"))
     val encoder = new CrypterAuthenticatorEncoder(crypter)
     val authenticatorRepository = new AuthenticatorRepositoryImpl(reactiveMongoApi)
