@@ -30,7 +30,8 @@ _Not necessary just after the sign-up because you already have a valid token._
 
 ```bash
 $ curl --request POST http://localhost:9000/api/auth/login \
-       --header 'Content-Type: application/json' -d '{"email": "adam.zareba@test.pl", "password": "this!Password!Is!Very!Very!Strong!"}' \
+       --header 'Content-Type: application/json' \
+       --data '{"email": "adam.zareba@test.pl", "password": "this!Password!Is!Very!Very!Strong!"}' \
        --verbose
 ```
 
