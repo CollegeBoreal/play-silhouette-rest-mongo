@@ -12,8 +12,8 @@ import scala.util.{Failure, Success, Try}
 
 object JWTAuthenticatorFormat {
 
-  implicit val jodaDateReads = JodaReads.jodaDateReads("yyyy-MM-dd'T'HH:mm:ss'Z'")
-  implicit val jodaDateWrites = JodaWrites.jodaDateWrites("yyyy-MM-dd'T'HH:mm:ss'Z'")
+  implicit val jodaDateReads: Reads[DateTime] = JodaReads.jodaDateReads("yyyy-MM-dd'T'HH:mm:ss'Z'")
+  implicit val jodaDateWrites: Writes[DateTime]  = JodaWrites.jodaDateWrites("yyyy-MM-dd'T'HH:mm:ss'Z'")
 
   implicit object FiniteDurationFormat extends Format[FiniteDuration] {
     def reads(json: JsValue): JsResult[FiniteDuration] = LongReads.reads(json).map(_.seconds)

@@ -6,15 +6,15 @@ import play.api.libs.json.{Json, _}
 import scala.util.{Failure, Success, Try}
 
 case class User(id: Option[String], loginInfo: LoginInfo, username: String, email: String,
-                firstName: String, lastName: String, avatarURL: Option[String], activated: Boolean) extends Identity
+                fullName: String, avatarURL: Option[String], activated: Boolean) extends Identity
 
 object User {
 
-  implicit val reader = Json.reads[User]
-  implicit val writer = Json.writes[User]
+  implicit val loginInfoReader: Reads[LoginInfo] = Json.reads[LoginInfo]
+  implicit val loginInfoWriter: Writes[LoginInfo] = Json.writes[LoginInfo]
 
-  implicit val loginInfoReader = Json.reads[LoginInfo]
-  implicit val loginInfoWriter = Json.writes[LoginInfo]
+  implicit val reader: Reads[User] = Json.reads[User]
+  implicit val writer: Writes[User] = Json.writes[User]
 
   implicit object UserWrites extends OWrites[User] {
     def writes(user: User): JsObject =
@@ -28,8 +28,7 @@ object User {
             ),
             "username" -> user.username,
             "email" -> user.email,
-            "firstName" -> user.firstName,
-            "lastName" -> user.lastName,
+            "fullName" -> user.fullName,
             "avatarURL" -> user.avatarURL,
             "activated" -> user.activated
           )
@@ -41,8 +40,7 @@ object User {
             ),
             "username" -> user.username,
             "email" -> user.email,
-            "firstName" -> user.firstName,
-            "lastName" -> user.lastName,
+            "fullName" -> user.fullName,
             "avatarURL" -> user.avatarURL,
             "activated" -> user.activated
           )
@@ -59,8 +57,7 @@ object User {
 
             val username = (user \ "userName").as[String]
             val email = (user \ "email").as[String]
-            val firstName = (user \ "firstName").as[String]
-            val lastName = (user \ "lastName").as[String]
+            val fullName = (user \ "fullName").as[String]
             val avatarURL = (user \ "avatarURL").asOpt[String]
             val activated = (user \ "activated").as[Boolean]
 
@@ -70,8 +67,7 @@ object User {
                 new LoginInfo(providerId, providerKey),
                 username,
                 email,
-                firstName,
-                lastName,
+                fullName,
                 avatarURL,
                 activated
               )

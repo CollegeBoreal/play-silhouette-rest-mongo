@@ -15,14 +15,13 @@ import com.mohiva.play.silhouette.impl.util.{PlayCacheLayer, SecureRandomIDGener
 import com.mohiva.play.silhouette.password.{BCryptPasswordHasher, BCryptSha256PasswordHasher}
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
-import dao._
+import dao.{AuthenticatorRepositoryDAOImpl, _}
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
 import play.api.libs.ws.WSClient
 import play.modules.reactivemongo.ReactiveMongoApi
-import repository.AuthenticatorRepositoryImpl
 import service.{UserService, UserServiceImpl}
 import utils.auth.{CustomSecuredErrorHandler, CustomUnsecuredErrorHandler, DefaultEnv}
 
@@ -40,7 +39,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
 
     bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]] // set your own Environment [Type]
     bind[UserService].to[UserServiceImpl]   // @provides provideEnvironment [Implementation]
-    bind[AuthenticatorRepository[JWTAuthenticator]].to[AuthenticatorRepositoryImpl] // @provides provideAuthenticatorService
+    bind[AuthenticatorRepository[JWTAuthenticator]].to[AuthenticatorRepositoryDAOImpl] // @provides provideAuthenticatorService
     bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAOImpl] // provides provideAuthInfoRepository
   }
 
@@ -101,7 +100,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
                                   reactiveMongoApi: ReactiveMongoApi): AuthenticatorService[JWTAuthenticator] = {
     val settings = JWTAuthenticatorSettings(sharedSecret = configuration.get[String]("play.http.secret.key"))
     val encoder = new CrypterAuthenticatorEncoder(crypter)
-    val authenticatorRepository = new AuthenticatorRepositoryImpl(reactiveMongoApi)
+    val authenticatorRepository = new AuthenticatorRepositoryDAOImpl(reactiveMongoApi)
 
     new JWTAuthenticatorService(settings, Some(authenticatorRepository), encoder, idGenerator, clock)
   }

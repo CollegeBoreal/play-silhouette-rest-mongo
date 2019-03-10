@@ -1,10 +1,9 @@
-package repository
-
-import javax.inject.Inject
+package dao
 
 import com.mohiva.play.silhouette.api.repositories.AuthenticatorRepository
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import formatters.json.JWTAuthenticatorFormat._
+import javax.inject.Inject
 import play.api.libs.json.Writes._
 import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoApi
@@ -18,7 +17,7 @@ import scala.concurrent.{ExecutionContext, Future}
 /**
   * Implementation of the authenticator repository which uses the database layer to persist the authenticator.
   */
-class AuthenticatorRepositoryImpl @Inject()(reactiveMongoApi: ReactiveMongoApi)(implicit ec: ExecutionContext) extends AuthenticatorRepository[JWTAuthenticator] {
+class AuthenticatorRepositoryDAOImpl @Inject()(reactiveMongoApi: ReactiveMongoApi)(implicit ec: ExecutionContext) extends AuthenticatorRepository[JWTAuthenticator] {
 
   final val maxDuration = 12 hours
 
