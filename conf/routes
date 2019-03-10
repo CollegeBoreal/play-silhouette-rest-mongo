@@ -8,7 +8,7 @@ GET         /docs                                                           cont
 
 # Home page
 GET         /                                                               controllers.ApplicationController.index
-GET         /badPassword                                                    controllers.ApplicationController.badPassword
+GET         /api/auth/badPassword                                           controllers.ApplicationController.badPassword
 GET         /colors                                                         controllers.ApplicationController.colors
 
 POST        /api/auth/login                                                 controllers.CredentialsAuthController.authenticate

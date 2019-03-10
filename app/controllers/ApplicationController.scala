@@ -8,12 +8,16 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import utils.auth.DefaultEnv
 
+import play.api.Logger
+
 import scala.concurrent.Future
 
 @Api(value = "Example data")
 @Singleton
 class ApplicationController @Inject()(components: ControllerComponents,
                                       silhouette: Silhouette[DefaultEnv]) extends AbstractController(components) {
+
+  val logger: Logger = Logger(this.getClass)
 
   /**
     * Create an Action to render an HTML page with a welcome message.
@@ -36,6 +40,17 @@ class ApplicationController @Inject()(components: ControllerComponents,
 
   @ApiOperation(value = "Get bad password value")
   def badPassword = silhouette.SecuredAction.async { implicit request =>
+
+    if (logger.isDebugEnabled) {
+
+      logger.debug("Displaying headers :-------------------------------------------------------------------")
+
+      val headers: Map[String, String] = request.headers.toSimpleMap
+      for ((k,v) <- headers) {
+        logger.debug(s"key: $k, value: $v")
+      }
+    }
+
     Future.successful(Ok(Json.obj("result" -> "qwerty1234")))
   }
 
