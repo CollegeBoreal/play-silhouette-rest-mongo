@@ -9,7 +9,7 @@ Example project for Play Framework that uses [Silhouette](https://github.com/moh
 ```bash
 $ curl --request POST http://localhost:9000/api/auth/register \
        --header 'Content-Type: application/json' \
-       --data '{"email": "adam.zareba@tes.pl", "password": "this!Password!Is!Very!Very!Strong!", "fullName": "Adam Zareba", "terms": true}' \
+       --data '{"email": "adam.zareba@test.pl", "password": "this!Password!Is!Very!Very!Strong!", "fullName": "Adam Zareba", "terms": true}' \
        --verbose
 ```
 
