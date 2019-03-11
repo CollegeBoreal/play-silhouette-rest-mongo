@@ -57,7 +57,7 @@ $ export JWT_TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...
 _The token must belong to a user with Admin role_
 
 ```bash
-$ curl http://localhost:9000/badPassword --header X-Auth-Token:$JWT_TOKEN --verbose
+$ curl http://localhost:9000/api/badPassword --header X-Auth-Token:$JWT_TOKEN --verbose
 ```
 
 ```
