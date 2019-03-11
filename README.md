@@ -7,7 +7,7 @@ Example project for Play Framework that uses [Silhouette](https://github.com/moh
 ### Sign-up
 
 ```bash
-$ curl --request http://localhost:9000/api/auth/register \
+$ curl http://localhost:9000/api/auth/register \
        --header 'Content-Type: application/json' \
        --data '{"email": "adam.zareba@test.pl", "password": "this!Password!Is!Very!Very!Strong!", "fullName": "Adam Zareba", "terms": true}' \
        --verbose
@@ -29,7 +29,7 @@ $ curl --request http://localhost:9000/api/auth/register \
 _Not necessary just after the sign-up because you already have a valid token._
 
 ```bash
-$ curl --request http://localhost:9000/api/auth/login \
+$ curl http://localhost:9000/api/auth/login \
        --header 'Content-Type: application/json' \
        --data '{"email": "adam.zareba@test.pl", "password": "this!Password!Is!Very!Very!Strong!"}' \
        --verbose
