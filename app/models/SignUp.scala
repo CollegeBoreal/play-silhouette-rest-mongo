@@ -1,4 +1,4 @@
-package models.security
+package models
 
 import io.swagger.annotations.{ApiModel, ApiModelProperty}
 

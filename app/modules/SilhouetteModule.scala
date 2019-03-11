@@ -1,11 +1,11 @@
-package module
+package modules
 
 import com.google.inject.name.Named
 import com.google.inject.{AbstractModule, Provides}
 import com.mohiva.play.silhouette.api.actions.{SecuredErrorHandler, UnsecuredErrorHandler}
 import com.mohiva.play.silhouette.api.crypto.{Crypter, CrypterAuthenticatorEncoder}
 import com.mohiva.play.silhouette.api.repositories.{AuthInfoRepository, AuthenticatorRepository}
-import com.mohiva.play.silhouette.api.services.{AuthenticatorService, AvatarService}
+import com.mohiva.play.silhouette.api.services.{AuthenticatorService, AvatarService, IdentityService}
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
 import com.mohiva.play.silhouette.crypto.{JcaCrypter, JcaCrypterSettings}
@@ -15,14 +15,14 @@ import com.mohiva.play.silhouette.impl.util.{PlayCacheLayer, SecureRandomIDGener
 import com.mohiva.play.silhouette.password.{BCryptPasswordHasher, BCryptSha256PasswordHasher}
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
-import dao.{AuthenticatorRepositoryDAOImpl, _}
+import daos.{AuthenticatorRepositoryDAO, PasswordInfoDAO, UserDAO}
+import models.User
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 import net.codingwell.scalaguice.ScalaModule
 import play.api.Configuration
 import play.api.libs.ws.WSClient
 import play.modules.reactivemongo.ReactiveMongoApi
-import service.{UserService, UserServiceImpl}
 import utils.auth.{CustomSecuredErrorHandler, CustomUnsecuredErrorHandler, DefaultEnv}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -38,9 +38,9 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[Clock].toInstance(Clock())
 
     bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]] // set your own Environment [Type]
-    bind[UserService].to[UserServiceImpl]   // @provides provideEnvironment [Implementation]
-    bind[AuthenticatorRepository[JWTAuthenticator]].to[AuthenticatorRepositoryDAOImpl] // @provides provideAuthenticatorService
-    bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAOImpl] // provides provideAuthInfoRepository
+    bind[IdentityService[User]].to[UserDAO]   // @provides provideEnvironment [Implementation]
+    bind[AuthenticatorRepository[JWTAuthenticator]].to[AuthenticatorRepositoryDAO] // @provides provideAuthenticatorService
+    bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAO] // provides provideAuthInfoRepository
   }
 
   /**
@@ -62,7 +62,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     */
   @Provides
   def provideEnvironment(
-                                  userService: UserService,
+                                  userService: UserDAO,
   @Named("authenticator-service") authenticatorService: AuthenticatorService[JWTAuthenticator],
                                   eventBus: EventBus): Environment[DefaultEnv] =
   Environment[DefaultEnv](userService, authenticatorService, Seq(), eventBus)
@@ -100,7 +100,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
                                   reactiveMongoApi: ReactiveMongoApi): AuthenticatorService[JWTAuthenticator] = {
     val settings = JWTAuthenticatorSettings(sharedSecret = configuration.get[String]("play.http.secret.key"))
     val encoder = new CrypterAuthenticatorEncoder(crypter)
-    val authenticatorRepository = new AuthenticatorRepositoryDAOImpl(reactiveMongoApi)
+    val authenticatorRepository = new AuthenticatorRepositoryDAO(reactiveMongoApi)
 
     new JWTAuthenticatorService(settings, Some(authenticatorRepository), encoder, idGenerator, clock)
   }

@@ -1,4 +1,4 @@
-package models.security
+package models
 
 import com.mohiva.play.silhouette.api.{Identity, LoginInfo}
 import play.api.libs.json.{Json, _}

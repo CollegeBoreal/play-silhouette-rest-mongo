@@ -1,4 +1,4 @@
-package formatters.json
+package models
 
 import io.swagger.annotations.{ApiModel, ApiModelProperty}
 import org.joda.time.DateTime

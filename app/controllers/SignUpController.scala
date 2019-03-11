@@ -1,20 +1,20 @@
 package controllers
 
 import javax.inject.Inject
+
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.AvatarService
 import com.mohiva.play.silhouette.api.util.{Clock, PasswordHasherRegistry}
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import formatters.json.Token
+import daos.UserDAO
 import io.swagger.annotations.{Api, ApiImplicitParam, ApiImplicitParams, ApiOperation}
-import models.security.{SignUp, User}
+import models.{SignUp, Token, User}
 import play.api.Configuration
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.libs.json.{JsError, JsValue, Json, OFormat}
 import play.api.libs.mailer.{Email, MailerClient}
 import play.api.mvc.{AbstractController, Action, ControllerComponents}
-import service.UserService
 import utils.auth.DefaultEnv
 import utils.responses.rest.Bad
 
@@ -22,7 +22,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Api(value = "Registration")
 class SignUpController @Inject()(components: ControllerComponents,
-                                 userService: UserService,
+                                 userService: UserDAO,
                                  configuration: Configuration,
                                  silhouette: Silhouette[DefaultEnv],
                                  clock: Clock,
@@ -42,7 +42,7 @@ class SignUpController @Inject()(components: ControllerComponents,
       new ApiImplicitParam(
         value = "SignUp",
         required = true,
-        dataType = "models.security.SignUp",
+        dataType = "models.SignUp",
         paramType = "body"
       )
     )

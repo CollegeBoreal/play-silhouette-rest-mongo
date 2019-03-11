@@ -8,10 +8,10 @@ GET         /docs                                                           cont
 
 # Home page
 GET         /                                                               controllers.ApplicationController.index
-GET         /api/auth/badPassword                                           controllers.ApplicationController.badPassword
-GET         /colors                                                         controllers.ApplicationController.colors
+GET         /api/badPassword                                                controllers.ApplicationController.badPassword
+GET         /api/colors                                                     controllers.ApplicationController.colors
 
-POST        /api/auth/login                                                 controllers.CredentialsAuthController.authenticate
+POST        /api/auth/login                                                 controllers.CredentialAuthController.authenticate
 POST        /api/auth/register                                              controllers.SignUpController.signUp
 
 # Map static resources from the /public folder to the /assets URL path

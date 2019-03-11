@@ -1,11 +1,11 @@
-package dao
+package daos
 
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.util.PasswordInfo
 import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.{JsObject, Json, OFormat}
 import play.modules.reactivemongo.ReactiveMongoApi
 import reactivemongo.play.json._
 import reactivemongo.play.json.collection._
@@ -15,14 +15,14 @@ import scala.concurrent.{ExecutionContext, Future}
 /**
   * An implementation of the auth info DAO which stores the data in database.
   */
-class PasswordInfoDAOImpl @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ex: ExecutionContext) extends DelegableAuthInfoDAO[PasswordInfo] {
+class PasswordInfoDAO @Inject()(val reactiveMongoApi: ReactiveMongoApi)(implicit ex: ExecutionContext) extends DelegableAuthInfoDAO[PasswordInfo] {
 
   /**
     * The data store for the auth info.
     */
-  def passwords = reactiveMongoApi.database.map(_.collection[JSONCollection]("password"))
+  lazy val passwords: Future[JSONCollection] = reactiveMongoApi.database.map(_.collection[JSONCollection]("passwords"))
 
-  implicit lazy val format = Json.format[PasswordInfo]
+  implicit lazy val format: OFormat[PasswordInfo] = Json.format[PasswordInfo]
 
   /**
     * Finds the auth info which is linked with the specified login info.

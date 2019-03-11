@@ -7,7 +7,7 @@ local scriptsFolder="./scripts"
 
 mongo "mongodb://${hostAddress}:${portNumber}/${databaseName}" --eval "db.dropDatabase()"
 mongo "mongodb://${hostAddress}:${portNumber}/${databaseName}" ${scriptsFolder}/createSchema.js
-mongoimport --db ${databaseName} -h ${hostAddress}:${portNumber} --collection user --file ${scriptsFolder}/user.json --jsonArray
-mongoimport --db ${databaseName} -h ${hostAddress}:${portNumber} --collection password --file ${scriptsFolder}/password.json --jsonArray
+mongoimport --db ${databaseName} -h ${hostAddress}:${portNumber} --collection users --file ${scriptsFolder}/users.json --jsonArray
+mongoimport --db ${databaseName} -h ${hostAddress}:${portNumber} --collection passwords --file ${scriptsFolder}/passwords.json --jsonArray
 }
 main
